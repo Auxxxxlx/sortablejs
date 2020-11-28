@@ -1760,6 +1760,7 @@
     _onTouchMove: function (/**TouchEvent*/ evt) {
       if (tapEvt) {
         let options = this.options,
+          axis = options.fallbackAxis,
           fallbackTolerance = options.fallbackTolerance,
           fallbackOffset = options.fallbackOffset,
           touch = evt.touches ? evt.touches[0] : evt,
@@ -1770,20 +1771,20 @@
             PositionGhostAbsolutely &&
             ghostRelativeParent &&
             getRelativeScrollOffset(ghostRelativeParent),
-          dx =
+          dx = axis === 'x' ? 0 : (
             (touch.clientX - tapEvt.clientX + fallbackOffset.x) /
               (scaleX || 1) +
             (relativeScrollOffset
               ? relativeScrollOffset[0] - ghostRelativeParentInitialScroll[0]
               : 0) /
-              (scaleX || 1),
-          dy =
+              (scaleX || 1)),
+          dy = axis === 'y' ? 0 : (
             (touch.clientY - tapEvt.clientY + fallbackOffset.y) /
               (scaleY || 1) +
             (relativeScrollOffset
               ? relativeScrollOffset[1] - ghostRelativeParentInitialScroll[1]
               : 0) /
-              (scaleY || 1);
+              (scaleY || 1));
 
         // only set the status to dragging, when we are actually dragging
         if (!Sortable.active && !awaitingDragStarted) {
